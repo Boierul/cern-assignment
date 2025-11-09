@@ -11,7 +11,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 public class TodoApplication {
 
     public static void main(String[] args) {
-
         System.setProperty("user.timezone", "UTC");
         SpringApplication.run(TodoApplication.class, args);
     }

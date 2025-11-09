@@ -3,24 +3,89 @@ import { Todo, TodoService } from "./todo.service";
 import { BehaviorSubject, Observable, combineLatest } from "rxjs";
 import { FormControl } from '@angular/forms';
 import { map, startWith } from 'rxjs/operators';
+import { MatDialog } from '@angular/material/dialog';
+import { TodoDialogComponent } from './todo-dialog/todo-dialog.component';
 
 @Component({
   selector: 'app-root',
   template: `
-    <div class="title">
-      <h1>
-        A list of TODOs
-      </h1>
-    </div>
-    <div class="list">
-      <label for="search">Search...</label>
-      <input id="search" type="text" [formControl]="searchControl">
-      <app-progress-bar *ngIf="isLoading$ | async"></app-progress-bar>
-      <app-todo-item *ngFor="let todo of filteredTodos$ | async"
-                     [item]="todo"
-                     [isDeleting]="(deletingId$ | async) === todo.id"
-                     [isDisabled]="(deletingId$ | async) !== null"
-                     (delete)="deleteTodo(todo)"></app-todo-item>
+    <div class="page-container">
+      <header class="header">
+        <div class="header-content">
+          <div class="header-text">
+            <h1>Todo List</h1>
+            <p class="subtitle">Here's a list of your tasks for this month</p>
+          </div>
+          <button class="user-avatar" mat-icon-button>
+            <mat-icon>account_circle</mat-icon>
+          </button>
+        </div>
+      </header>
+
+      <div class="content">
+        <div class="toolbar">
+          <input 
+            type="text" 
+            class="filter-input" 
+            placeholder="Filter tasks"
+            [formControl]="searchControl">
+          
+          <div class="toolbar-actions">
+            <button class="filter-btn" mat-button disabled>
+              <mat-icon>add_circle_outline</mat-icon>
+              Status
+            </button>
+            <button class="filter-btn" mat-button disabled>
+              <mat-icon>add_circle_outline</mat-icon>
+              Priority
+            </button>
+            <button class="view-btn" mat-button disabled>
+              <mat-icon>view_list</mat-icon>
+              View
+            </button>
+            <button class="add-task-btn" mat-raised-button (click)="openAddTodoDialog(); $event.stopPropagation()">
+              Add Todo
+            </button>
+          </div>
+        </div>
+
+        <mat-progress-bar
+          *ngIf="isLoading$ | async"
+          mode="indeterminate"
+          class="loading-bar">
+        </mat-progress-bar>
+
+        <div class="table-container">
+          <table class="tasks-table">
+            <thead>
+              <tr>
+                <th class="index-col">#</th>
+                <th class="title-col">Title</th>
+                <th class="priority-col">Priority</th>
+                <th class="actions-col">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <app-todo-item *ngFor="let todo of filteredTodos$ | async; let i = index"
+                             [item]="todo"
+                             [index]="i + 1"
+                             [isDeleting]="(deletingId$ | async) === todo.id"
+                             [isDisabled]="(deletingId$ | async) !== null"
+                             (delete)="deleteTodo(todo)">
+              </app-todo-item>
+
+              <tr *ngIf="(filteredTodos$ | async)?.length === 0 && !(isLoading$ | async)" class="no-results">
+                <td colspan="4">
+                  <div class="no-todos">
+                    <mat-icon>search_off</mat-icon>
+                    <p>No tasks found</p>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   `,
   styleUrls: ['app.component.scss']
@@ -35,7 +100,7 @@ export class AppComponent {
   readonly searchControl = new FormControl('');
   readonly filteredTodos$: Observable<Todo[]>;
 
-  constructor(private todoService: TodoService) {
+  constructor(private todoService: TodoService, private dialog: MatDialog) {
     this.loadTodos();
 
     this.filteredTodos$ = combineLatest([
@@ -69,6 +134,22 @@ export class AppComponent {
         console.error('Failed to delete todo:', error);
         alert('Failed to delete todo. Please try again.');
         this.deletingId$.next(null);
+      }
+    });
+  }
+
+  openAddTodoDialog(): void {
+    const dialogRef = this.dialog.open(TodoDialogComponent, {
+      width: '500px',
+      height: 'fit-content',
+      panelClass: 'center-modal'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        // Add the new todo to the list
+        const currentTodos = this.todosSubject.value;
+        this.todosSubject.next([...currentTodos, result]);
       }
     });
   }

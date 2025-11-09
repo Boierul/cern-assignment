@@ -1,0 +1,41 @@
+<div class="dialog-container">
+  <h2>Add New Todo</h2>
+
+  <form [formGroup]="todoForm" (ngSubmit)="onSubmit()">
+    <div class="dialog-content">
+      <span>Todo Priority</span>
+      <div style="margin-bottom: 16px;">
+        <textarea id="task" formControlName="task" rows="5" maxlength="255" class="task-textarea"
+          placeholder="Enter your todo description...">
+      </textarea>
+        <div class="form-footer">
+          <div class="error" *ngIf="todoForm.get('task')?.hasError('required')">
+            Todo description is required
+          </div>
+          <div class="error" *ngIf="todoForm.get('task')?.hasError('minlength')">
+            Todo description must be at least 1 character
+          </div>
+          <div class="error" *ngIf="todoForm.get('task')?.hasError('maxlength')">
+            Todo description cannot exceed 255 characters
+          </div>
+          <div class="hint">{{todoForm.get('task')?.value?.length || 0}}/255</div>
+        </div>
+      </div>
+
+      <span>Todo Priority</span>
+      <select formControlName="priority" class="priority-select">
+        <option *ngFor="let priority of priorities" [value]="priority.value">
+          {{ priority.label }}
+        </option>
+      </select>
+    </div>
+
+    <div class="dialog-actions">
+      <button type="button" class="cancel-btn" (click)="onCancel()">Cancel</button>
+      <button type="submit" class="create-btn" [disabled]="isSubmitting">
+        <span *ngIf="isSubmitting">Creating...</span>
+        <span *ngIf="!isSubmitting">Create Todo</span>
+      </button>
+    </div>
+  </form>
+</div>

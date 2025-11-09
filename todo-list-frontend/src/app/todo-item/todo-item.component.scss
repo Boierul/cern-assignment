@@ -1,49 +1,99 @@
 :host {
-  display: block;
-  border: 1px solid grey;
-  padding: 12px 0 12px 12px;
-  margin-top: 12px;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.2s ease;
+  display: table-row;
+}
 
-  &:hover {
-    border-color: #666;
-    background-color: #f9f9f9;
+tr {
+  display: flex;
+  transition: background 0.15s;
+
+  &.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  &.deleting {
+    opacity: 0.4;
+    background: #fef2f2 !important;
+  }
+
+  td {
+    padding: 12px 16px;
+    color: #374151;
+    box-sizing: border-box;
+
+    &.index-col {
+      flex: 1;
+      font-weight: 600;
+      color: #6b7280;
+    }
+
+    &.title-col {
+      flex: 6;
+      font-size: 14px;
+      color: #111827;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+
+    &.priority-col {
+      flex: 2;
+    }
+
+    &.actions-col {
+      flex: 2;
+      text-align: center;
+    }
   }
 }
 
-.todo-item-container {
-  transition: all 0.3s ease;
-  position: relative;
-  
-  &.disabled {
-    opacity: 0.6;
-    pointer-events: none;
-  }
-  
-  &.deleting {
-    opacity: 0.2;
+.priority-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 500;
+
+  mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
   }
 
-  .task-indicator {
-    display: inline-block;
-    width: calc(100% - 37px);
-    position: relative;
-  
-    .deleting-indicator {
-      font-weight: bold;
-      margin-left: 10px;
-      color: #ff0000;
+  &.priority-low {
+    color: #6b7280;
+
+    mat-icon {
+      color: #3b82f6;
     }
   }
+
+  &.priority-medium {
+    color: #6b7280;
+
+    mat-icon {
+      color: #f59e0b;
+    }
+  }
+
+  &.priority-high {
+    color: #6b7280;
+
+    mat-icon {
+      color: #ef4444;
+    }
+  }
+}
+
+.delete-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  padding: 6px 16px;
   
-  .priority-indicator {
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    margin: 0;
-    border-left: 1px dotted black;
-    vertical-align: top;
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
   }
 }

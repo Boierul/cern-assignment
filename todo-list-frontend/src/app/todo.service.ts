@@ -21,6 +21,10 @@ export class TodoService {
     return this.http.get<Todo[]>(this.apiUrl);
   }
 
+  create(task: string, priority: 1 | 2 | 3): Observable<Todo> {
+    return this.http.post<Todo>(this.apiUrl, { task, priority });
+  }
+
   remove(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}?id=${id}`);
   }

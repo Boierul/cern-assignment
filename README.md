@@ -57,3 +57,33 @@ Provide the API call endpoints with the help of Spring (entity, repository, cont
 
 #### todo-list-frontend
 Using the backend API, replace the method definitions at todo.service.ts with actual API calls
+
+# Docker Setup
+
+This project includes Docker containerization for both frontend and backend services.
+
+## Prerequisites
+- Docker
+- Docker Compose
+
+## Running with Docker
+
+1. **Build and start the services:**
+   ```bash
+   docker-compose up --build
+   ```
+
+2. **Access the application:**
+   - Frontend: http://localhost
+   - Backend API: http://localhost:8099/api
+
+3. **Stop the services:**
+   ```bash
+   docker-compose down
+   ```
+
+## Docker Architecture
+
+- **Backend**: Multi-stage build with OpenJDK 17, runs on port 8099
+- **Frontend**: Multi-stage build with Node.js (build) and Nginx (serve), runs on port 80
+- **Network**: Both services communicate through a Docker network

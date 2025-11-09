@@ -1,0 +1,44 @@
+# Build artifacts
+build/
+.gradle/
+gradle-wrapper.jar
+gradlew
+gradlew.bat
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+.classpath
+.project
+.settings/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Test files
+src/test/
+
+# Documentation
+*.md
+docs/
+
+# Git
+.git/
+.gitignore
+
+# Docker files (don't copy Dockerfile into container)
+Dockerfile
+.dockerignore
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.swp
+*~
+
+# Node modules (if any)
+node_modules/

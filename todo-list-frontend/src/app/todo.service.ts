@@ -25,7 +25,7 @@ function removeFromMockData(id: number) {
 export class TodoService {
 
   getAll(): Observable<Todo[]> {
-    return of(undefined).pipe(delay(2_000), map(() => mockData));
+    return of(undefined).pipe(delay(100), map(() => mockData));
   }
 
   remove(id: number): Observable<void> {
